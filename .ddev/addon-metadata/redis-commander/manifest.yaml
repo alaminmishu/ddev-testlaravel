@@ -1,0 +1,12 @@
+name: redis-commander
+repository: ddev/ddev-redis-commander
+version: v1.3.0
+dependencies:
+    - redis
+install_date: "2025-01-11T16:22:20+06:00"
+project_files:
+    - docker-compose.redis-commander.yaml
+    - docker-compose.redis-commander_norouter.yaml
+    - commands/host/redis-commander
+global_files: []
+removal_actions: []
