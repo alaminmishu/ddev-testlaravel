@@ -1,12 +1,13 @@
 <?php
 
-use App\Exceptions\ApiExceptionHandler;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Application;
+use App\Exceptions\ApiExceptionHandler;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
-use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
 $exceptionHandler = new ApiExceptionHandler();
 
@@ -37,5 +38,9 @@ return Application::configure(basePath: dirname(__DIR__))
                 'message' => 'The request method is not allowed for the requested resource'
             ], 405);
         });
-
+        $exceptions->render(function (AccessDeniedHttpException $e) {
+            return response()->json([
+                'message' => 'Access Denied'
+            ], 405);
+        });
     })->create();
