@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class PostController extends Controller implements HasMiddleware
 {
@@ -41,9 +42,22 @@ class PostController extends Controller implements HasMiddleware
     /**
      * Display the specified resource.
      */
-    public function show(Post $post)
+    public function show($id)
     {
-        return $post;
+        try {
+            $post = Post::findOrFail($id);
+            return response()->json([
+                'status' => 'success',
+                'data' => $post,
+                'message' => 'Post fetched successfully'
+            ]);
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'status' => 'error',
+                'data' => null,
+                'message' => 'Post not found.'
+            ], 404);
+        }
     }
 
     /**
