@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 $exceptionHandler = new ApiExceptionHandler();
@@ -30,6 +31,11 @@ return Application::configure(basePath: dirname(__DIR__))
             return response()->json([
                 'message' => 'The requested resource was not found'
             ], 404);
+        });
+        $exceptions->render(function (MethodNotAllowedHttpException $e) {
+            return response()->json([
+                'message' => 'The request method is not allowed for the requested resource'
+            ], 405);
         });
 
     })->create();
